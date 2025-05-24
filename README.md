@@ -1,1 +1,1 @@
-<p>Nest.JS Backend API</p>
+<p>Nest.JS Backend API with Auth strategies</p>
