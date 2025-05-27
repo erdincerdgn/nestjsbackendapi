@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserController } from 'src/controller/http/user.controller';
 import { PrismaService } from 'src/infrastructure/prisma/prisma.service';
-import { getAllUser, UserCreate, UserDelete, UserSave } from './user-create';
+import { getAllUser, getOneUser, UserCreate, UserDelete, UserSave } from './user-create';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { UserPrismaRepository } from 'src/infrastructure/prisma/user-prisma.repository';
 
@@ -12,6 +12,7 @@ import { UserPrismaRepository } from 'src/infrastructure/prisma/user-prisma.repo
         UserSave,
         UserDelete,
         getAllUser,
+        getOneUser,
         {
             provide: IUserRepository,
             useClass: UserPrismaRepository

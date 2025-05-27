@@ -44,3 +44,12 @@ export class getAllUser {
     return await this.repo.getAllUser();
   }
 }
+
+@Injectable()
+export class getOneUser {
+  constructor (private readonly repo: IUserRepository) {}
+
+  async Run(user_id: string) {
+    return await this.repo.findById(user_id);
+  }
+}

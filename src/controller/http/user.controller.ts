@@ -1,6 +1,9 @@
-import { Controller, Post, Put, Delete, Body, Param, Get } from "@nestjs/common";
-import { UserCreate, UserSave, UserDelete, getAllUser } from "src/application/user-create";
+import { Controller, Post, Put, Delete, Body, Param, Get, UseGuards, Req, UnauthorizedException } from "@nestjs/common";
+import { UserCreate, UserSave, UserDelete, getAllUser, getOneUser } from "src/application/user-create";
 import { UserCreateDTO, UserUpdateDTO } from "./dto/user.dto";
+import { PassportJwtAuthGuard } from "src/infrastructure/auth/guards/passport-jwt.guard";
+import { AuthGuard } from "src/infrastructure/auth/guards/auth.guard";
+
 
 @Controller('user')
 export class UserController {
@@ -8,7 +11,8 @@ export class UserController {
         private readonly createUser: UserCreate,
         private readonly saveUser: UserSave,
         private readonly deleteUser: UserDelete,
-        private readonly getUser: getAllUser
+        private readonly getUser: getAllUser,
+        private readonly getOneUser: getOneUser
     ) {}
 
     @Post()
@@ -31,5 +35,19 @@ export class UserController {
     async get() {
         return this.getUser.Run();
     }
+
+    @UseGuards(PassportJwtAuthGuard)
+    @Get('me')
+    async getProfile(@Req() req: any) {
+        
+        const user_id = req.user?.user_id; // JWT payload içindeki user_id
+        console.log('REQ USER:', req.user);
+        if (!user_id) {
+            throw new UnauthorizedException('User ID not found in token');
+        }
+        const user = await this.getOneUser.Run(user_id);
+        return user;
+    }
+
 }
 
